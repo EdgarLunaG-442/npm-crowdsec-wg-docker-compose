@@ -1,4 +1,0 @@
-filenames:
-  - /var/log/swag/*
-labels:
-  type: nginx
