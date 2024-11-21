@@ -17,10 +17,7 @@ fi
 
 if [[ -n $(grep -E -ir --include=.env "{{CROWDSEC_BOUNCER_APIKEY}}" .) ]]
 then
-  set -a
-  source ./.env
-  export CROWD_SEC_ENROLLMENT_KEY=$1
-  docker compose up crowdsec -d
+  CROWD_SEC_ENROLLMENT_KEY=$1 docker compose up crowdsec -d
   sed -i "s/{{CROWDSEC_BOUNCER_APIKEY}}/$(docker compose exec crowdsec cscli bouncer add npm-bouncer)/g" ./.env
   docker compose down
 fi
