@@ -16,7 +16,7 @@ services:
       DB_MYSQL_HOST: "db"
       DB_MYSQL_PORT: 3306
       DB_MYSQL_USER: "npm"
-      DB_MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      DB_MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       DB_MYSQL_NAME: "npm"
       CROWDSEC_OPENRESTY_BOUNCER: |
         ENABLED=true
@@ -37,10 +37,10 @@ services:
     networks:
       npm:
     environment:
-      MYSQL_ROOT_PASSWORD: ${ROOT_DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: 'npm'
       MYSQL_USER: 'npm'
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mariadb-data:/var/lib/mysql
     security_opt:
