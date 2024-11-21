@@ -1,13 +1,5 @@
 #!/bin/bash
 # ------------------------------------------------------------------
-# [Author] Title
-#          Description
-# ------------------------------------------------------------------
-
-VERSION=0.1.0
-SUBJECT=some-unique-id
-USAGE="Usage: command -ihv args"
-
 
 if [ ! -e ./.env ]
 then
@@ -28,13 +20,18 @@ then
   set -a
   source ./.env
   export CROWD_SEC_ENROLLMENT_KEY=$1
-  docker-compose up crowdsec -d
-  sed -i "s/{{CROWDSEC_BOUNCER_APIKEY}}/$(docker-compose exec crowdsec cscli bouncer add npm-bouncer)/g" ./.env
-  docker-compose down
+  docker compose up crowdsec -d
+  sed -i "s/{{CROWDSEC_BOUNCER_APIKEY}}/$(docker compose exec crowdsec cscli bouncer add npm-bouncer)/g" ./.env
+  docker compose down
 fi
 
 set -a
 source ./.env
 export CROWD_SEC_ENROLLMENT_KEY=$1
 export WG_HOST=$2
-docker-compose up -d
+MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" \
+MYSQL_PASSWORD="$MYSQL_PASSWORD" \
+CROWDSEC_BOUNCER_APIKEY="$CROWDSEC_BOUNCER_APIKEY" \
+CROWD_SEC_ENROLLMENT_KEY="$CROWD_SEC_ENROLLMENT_KEY" \
+WG_HOST="$WG_HOST" \
+docker compose up -d
