@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 # ------------------------------------------------------------------
 
 if [ ! -e ./.env ]
@@ -16,16 +16,21 @@ fi
 
 if [[ -n $(grep -E -ir --include=.env "{{CROWDSEC_BOUNCER_APIKEY}}" .) ]]
 then
-  export CROWD_SEC_ENROLLMENT_KEY=$1
-  sleep 10
-  export CROWDSEC_BOUNCER_APIKEY=$(docker exec crowdsec cscli bouncer add npm-bouncer | grep -A 2 "API key for 'npm-bouncer':" | tail -n 1 | xargs)
+  export CROWDSEC_ENROLLMENT_KEY=$1
+  docker compose up crowdsec -d
   sleep 5
-  sed -i "s/{{CROWDSEC_BOUNCER_APIKEY}}/$CROWDSEC_BOUNCER_APIKEY/g" ./.env
+  sed -i "s/{{CROWDSEC_BOUNCER_APIKEY}}/$(docker exec crowdsec cscli bouncer add npm-bouncer | grep -A 2 "API key for 'npm-bouncer':" | tail -n 1 | xargs)/g" ./.env
   docker compose down
 fi
 
 set -a
 source ./.env
-export CROWD_SEC_ENROLLMENT_KEY=$1
+export CROWDSEC_ENROLLMENT_KEY=$1
 export WG_HOST=$2
-MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" MYSQL_PASSWORD="$MYSQL_PASSWORD" EASY_WG_PASSWORD="$EASY_WG_PASSWORD" CROWDSEC_BOUNCER_APIKEY="$CROWDSEC_BOUNCER_APIKEY" CROWD_SEC_ENROLLMENT_KEY="$CROWD_SEC_ENROLLMENT_KEY" WG_HOST="$WG_HOST" docker compose up -d
+MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" \
+MYSQL_PASSWORD="$MYSQL_PASSWORD" \
+EASY_WG_PASSWORD="$EASY_WG_PASSWORD" \
+CROWDSEC_BOUNCER_APIKEY="$CROWDSEC_BOUNCER_APIKEY" \
+CROWDSEC_ENROLLMENT_KEY="$CROWDSEC_ENROLLMENT_KEY" \
+WG_HOST="$WG_HOST" \
+docker compose up -d
