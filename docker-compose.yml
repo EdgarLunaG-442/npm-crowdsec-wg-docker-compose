@@ -74,7 +74,7 @@ services:
     container_name: wg-easy
     environment:
       WG_HOST: ${WG_HOST}
-      PASSWORD: ${EASY_WG_PASSWORD}
+      PASSWORD_HASH: ${EASY_WG_PASSWORD_HASH}
       WG_PORT: 51820
       WG_PERSISTENT_KEEPALIVE: 25
     ports:
