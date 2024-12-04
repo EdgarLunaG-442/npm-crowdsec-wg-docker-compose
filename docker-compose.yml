@@ -13,6 +13,7 @@ services:
       - '80:80'  # Public HTTP Port
       - '443:443'  # Public HTTPS Port
       - '81:81'  # Admin Web Port
+      - '51820:51820/udp' # WG PORT
     environment:
       DB_MYSQL_HOST: "db"
       DB_MYSQL_PORT: 3306
@@ -89,8 +90,8 @@ services:
     volumes:
       - ./wg-config:/config:z
       - /lib/modules:/lib/modules:ro
-    ports:
-      - 51820:51820/udp
+    expose:
+      - 51820/udp
     networks:
       wg:
     sysctls:
