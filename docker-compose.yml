@@ -8,12 +8,10 @@ services:
     networks:
       crowdsec:
       npm:
-      wg:
     ports:
       - '80:80'  # Public HTTP Port
       - '443:443'  # Public HTTPS Port
       - '81:81'  # Admin Web Port
-      - '51820:51820/udp' # WG PORT
     environment:
       DB_MYSQL_HOST: "db"
       DB_MYSQL_PORT: 3306
@@ -66,6 +64,7 @@ services:
       - crowdsec-config:/etc/crowdsec/
       - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml
       - ./data/logs/:/var/log/npm:ro
+      - ./temps:/temps:ro
     networks:
       crowdsec:
     restart: unless-stopped
@@ -92,13 +91,12 @@ services:
       - /lib/modules:/lib/modules:ro
     expose:
       - 51820/udp
-    networks:
-      wg:
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-      - net.ipv4.conf.all.forwarding=1
-      - net.ipv6.conf.all.forwarding=1
-      - net.ipv4.ip_forward=1
+    network_mode: host
+#    sysctls:
+#      - net.ipv4.conf.all.src_valid_mark=1
+#      - net.ipv4.conf.all.forwarding=1
+#      - net.ipv6.conf.all.forwarding=1
+#      - net.ipv4.ip_forward=1
     restart: unless-stopped
 
 volumes:
@@ -108,8 +106,4 @@ volumes:
 
 networks:
   crowdsec:
-    driver: bridge
   npm:
-    driver: bridge
-  wg:
-    driver: bridge
