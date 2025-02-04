@@ -9,8 +9,6 @@ fi
 
 if [[ -n $(grep -E -ir --include=.env "{{MYSQL_PASSWORD}}" .) ]]
 then
-  EASY_WG_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 32)
-  EASY_WG_PASSWORD_HASH=$(docker run -it ghcr.io/wg-easy/wg-easy wgpw "$EASY_WG_PASSWORD" | sed "s/PASSWORD_HASH=//g")
   sed -i "s/{{MYSQL_ROOT_PASSWORD}}/$(tr -dc A-Za-z0-9 </dev/urandom | head -c 32)/g" ./.env
   sed -i "s/{{MYSQL_PASSWORD}}/$(tr -dc A-Za-z0-9 </dev/urandom | head -c 32)/g" ./.env
 fi
