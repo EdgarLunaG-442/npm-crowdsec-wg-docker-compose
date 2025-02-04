@@ -22,5 +22,5 @@ MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" \
 MYSQL_PASSWORD="$MYSQL_PASSWORD" \
 CROWDSEC_BOUNCER_APIKEY="$CROWDSEC_BOUNCER_APIKEY" \
 WG_HOST="$WG_HOST" \
-docker compose up -d
+docker compose -f ./docker-compose-k3s.yml up -d
 set +a
