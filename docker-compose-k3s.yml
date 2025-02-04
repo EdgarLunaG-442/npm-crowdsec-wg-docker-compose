@@ -65,14 +65,12 @@ services:
       - SERVERURL=${WG_HOST}
       - SERVERPORT=51820
       - PEERS=1
-      - PEERDNS=1.1.1.1
+      - PEERDNS=1.1.1.1,8.8.8.8
       - INTERNAL_SUBNET=10.8.0.0/24
       - ALLOWEDIPS=10.0.11.0/24
     volumes:
       - ./wg-config:/config:z
       - /lib/modules:/lib/modules:ro
-    expose:
-      - 51820/udp
     healthcheck:
       test: [ "CMD", "wg", "show", "wg0" ]
       interval: 30s
@@ -80,6 +78,9 @@ services:
       retries: 3
       start_period: 10s
     network_mode: host
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
 #    sysctls:
 #      - net.ipv4.conf.all.src_valid_mark=1
 #      - net.ipv4.conf.all.forwarding=1
