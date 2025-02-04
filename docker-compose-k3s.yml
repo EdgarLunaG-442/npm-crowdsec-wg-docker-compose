@@ -65,8 +65,9 @@ services:
       - SERVERURL=${WG_HOST}
       - SERVERPORT=51820
       - PEERS=1
-      - PEERDNS=1.1.1.1
-      - INTERNAL_SUBNET=10.8.0.0
+      - PEERDNS=1.1.1.1,8.8.8.8
+      - INTERNAL_SUBNET=10.8.0.0/24
+      - ALLOWEDIPS=10.0.11.0/24
     volumes:
       - ./wg-config:/config:z
       - /lib/modules:/lib/modules:ro
